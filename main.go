@@ -36,11 +36,11 @@ func main() {
 		RemainingTickets = RemainingTickets - userTickets
 		bookings = append(bookings, FirstName+" "+LastName)
 
-		fmt.Printf("Thank you %v %v for booking %v tickets. you will recive a confirmation email at %v\n", FirstName, LastName, userTickets, Email)
+		fmt.Printf("Thank you %v %v for booking %v tickets. you will receive a confirmation email at %v\n", FirstName, LastName, userTickets, Email)
 
 		fmt.Printf("%v Tickets Remaining for %v\n", RemainingTickets, ConferenceName)
 
-		var firstNames []string
+		  firstNames := []string{}
 		for _, booking := range bookings {
 			names := strings.Fields(booking)
 
@@ -49,6 +49,10 @@ func main() {
 
 		fmt.Printf("The first name of bookings are: %v\n", firstNames)
 
+		if RemainingTickets ==0{
+			//End program
+			fmt.Println("Our Confrence is booked out. Come back next year.")
+		}
 	}
 
 }
