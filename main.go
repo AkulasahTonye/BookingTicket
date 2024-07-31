@@ -27,32 +27,47 @@ func main() {
 		fmt.Println("Enter your Last Name:")
 		fmt.Scan(&LastName)
 
-		fmt.Println("Enter number of Tickets:")
-		fmt.Scan(&userTickets)
-
 		fmt.Println("Enter your Email Address:")
 		fmt.Scan(&Email)
 
-		RemainingTickets = RemainingTickets - userTickets
-		bookings = append(bookings, FirstName+" "+LastName)
+		fmt.Println("Enter number of Tickets:")
+		fmt.Scan(&userTickets)
 
-		fmt.Printf("Thank you %v %v for booking %v tickets. you will receive a confirmation email at %v\n", FirstName, LastName, userTickets, Email)
+		isValidName := len(FirstName) >2 && len(LastName) >2
+		isValidEmail := strings.Contains(Email, "@")
+		isValidTicketNumber := userTickets > 0 && userTickets <= RemainingTickets
 
-		fmt.Printf("%v Tickets Remaining for %v\n", RemainingTickets, ConferenceName)
+		if isValidName && isValidEmail && isValidTicketNumber {
+			RemainingTickets = RemainingTickets - userTickets
+			bookings = append(bookings, FirstName+" "+LastName)
 
-		  firstNames := []string{}
-		for _, booking := range bookings {
-			names := strings.Fields(booking)
+			fmt.Printf("Thank you %v %v for booking %v tickets. you will receive a confirmation email at %v\n", FirstName, LastName, userTickets, Email)
 
-			firstNames = append(firstNames, names[0])
-		}
+			fmt.Printf("%v Tickets Remaining for %v\n", RemainingTickets, ConferenceName)
 
-		fmt.Printf("The first name of bookings are: %v\n", firstNames)
+			firstNames := []string{}
+			for _, booking := range bookings {
+				names := strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
 
-		if RemainingTickets ==0{
-			//End program
-			fmt.Println("Our Confrence is booked out. Come back next year.")
+			fmt.Printf("The first name of bookings are: %v\n", firstNames)
+
+			if  RemainingTickets == 0{
+				//End program
+				fmt.Println("Our Confrence is booked out. Come back next year.")
+				break
+			}
+		} else {
+			if !isValidName {
+				fmt.Println("First name or Last name you entered is to short")
+			}
+			if !isValidEmail{
+				fmt.Println("Your email Address doesn't contain the @ sign")
+			}
+			if !isValidTicketNumber{
+				fmt.Println("The number of tickets you entered is invalid")
+			}
 		}
 	}
-
 }
