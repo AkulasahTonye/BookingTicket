@@ -1,14 +1,16 @@
 package main
 
 import (
+	"FlightBookingTicket/users"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
-const ConferenceTickets = 50
-var ConferenceName = "HNG Conference"
-var RemainingTickets uint = 50
-var bookings = []string{}
+const conferenceTickets = 50
+var conferenceName = "HNG Conference"
+var remainingTickets uint = 50
+var bookings = make([]map[string]string, 0)
+
 
 
 
@@ -18,7 +20,7 @@ func main() {
 
 	for {
 		firstname, lastname, email,   userTickets := GetUserInput()
-	    isValidName, isValidEmail, isValidTicketNumber := ValidateUserInput(firstname, lastname, userTickets,  email)
+	    isValidName, isValidEmail, isValidTicketNumber := users.ValidateUserInput(firstname, lastname, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
@@ -28,7 +30,7 @@ func main() {
 			firstNames := GetFirstName(  )
 			fmt.Printf("The first name of bookings are: %v\n", firstNames)
 
-			if  RemainingTickets == 0{
+			if  remainingTickets == 0{
 				//End program
 				fmt.Println("Our Confrence is booked out. Come back next year.")
 				break
@@ -49,16 +51,15 @@ func main() {
 	}
 
 func greetusers(){
-	fmt.Printf("Welcome to %v booking application. \n", ConferenceName)
-	fmt.Printf("We have total of %v Tickets and %v are still available.\n",ConferenceTickets, RemainingTickets)
+	fmt.Printf("Welcome to %v booking application. \n", conferenceName)
+	fmt.Printf("We have total of %v Tickets and %v are still available.\n",conferenceTickets, remainingTickets)
 	fmt.Printf("Get your tickets here to attend.\n")
 }
 
 func GetFirstName( ) []string  {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		names := strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
@@ -86,12 +87,21 @@ func GetUserInput() (string, string, string, uint){
 }
 
 func bookTicket( userTickets uint, firstname string, lastname string, email string,)  {
-	RemainingTickets = RemainingTickets - userTickets
-	bookings = append(bookings, firstname+" "+lastname)
+	remainingTickets = remainingTickets - userTickets
+
+	// Create a map for User
+
+	var userData = make(map[string]string)
+	userData["firstName"] = firstname
+	userData["lastName"] = lastname
+	userData["email"] = email
+ 	userData["numberOfTickets"] =  strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. you will receive a confirmation email at %v\n", firstname, lastname, userTickets, email)
-	fmt.Printf("%v Tickets Remaining for %v\n", RemainingTickets, ConferenceName);;
+	fmt.Printf("%v Tickets Remaining for %v\n", remainingTickets, conferenceName);
 }
-
 
 
